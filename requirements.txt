@@ -1,0 +1,6 @@
+django
+pillow
+djangorestframework
+drf-yasg 
+psycopg2
+django-rest-auth
