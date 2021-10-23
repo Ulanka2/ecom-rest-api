@@ -5,6 +5,7 @@ from .models import Product
 from applications.carts.models import Cart, CartProduct
 from applications.orders.models import Order
 
+
 class CategorySerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -27,17 +28,35 @@ class ProductSerializer(serializers.ModelSerializer):
         'image', 'available', 'created_at', 'updated']
 
 
-class CartProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CartProduct
-        fields = ['amount']
 
 
 # class ProductInCartSerializer(serializers.Serializer):
-
 #     id = serializers.IntegerField()
 #     name = serializers.CharField()
 #     amount = serializers.IntegerField()
+
+#     class Meta:
+#         model = CartProduct
+#         fields = ['id', 'name', 'amount']
+
+# class CartSerializer(serializers.ModelSerializer):
+#     products = serializers.SerializerMethodField()
+    
+#     class Meta:
+#         model = Cart
+#         fields = ['id', 'owner', 'products',]
+    
+#     def get_products(self, instance):
+#         cartproducts = instance.cart_products.all()
+#         products = []
+#         for cartproduct in cartproducts:
+#             product = {}
+#             product['name'] = cartproduct.product.name
+#             product['id'] = cartproduct.product_id
+#             product['amount'] = cartproduct.amount
+#             products.append(product)
+#         serializer = ProductInCartSerializer(products, many=True)
+#         return serializer.data
 
 class ProductInCart(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='product.id')
@@ -47,28 +66,12 @@ class ProductInCart(serializers.ModelSerializer):
         model = CartProduct
         fields = ['id', 'name', 'amount']
 
-class CartsSerializer(serializers.ModelSerializer):
-
-    # products = serializers.SerializerMethodField()
+class CartSerializer(serializers.ModelSerializer):
     products = ProductInCart(source='cart_products', many=True)
     
     class Meta:
         model = Cart
         fields = ['id', 'owner', 'products',]
-    
-    # def get_products(self, instance):
-    #     cartproducts = instance.cart_products.all()
-    #     products = []
-    #     for cartproduct in cartproducts:
-    #         product = {}
-    #         product['name'] = cartproduct.product.name
-    #         product['id'] = cartproduct.product_id
-    #         product['amount'] = cartproduct.amount
-    #         products.append(product)
-    #     serializer = ProductInCartSerializer(products, many=True)
-    #     return serializer.data
-
-
 
 
 
@@ -76,8 +79,12 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = '__all__'
+        fields = ['id', 'total_price', 'total_quantity', 'product_list', 'created_at', 'deliveredAt', ]
 
 
 class AmountSerializer(serializers.Serializer):
     amount = serializers.IntegerField()
+
+
+
+

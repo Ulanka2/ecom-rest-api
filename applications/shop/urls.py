@@ -7,7 +7,7 @@ router = SimpleRouter()
 
 router.register('products', ProductViewSet)
 router.register('category', CategoryViewSet)
-# router.register('order', OrderViewSet)
+
 
 urlpatterns = []
 
